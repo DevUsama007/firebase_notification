@@ -33,26 +33,15 @@ Key Features
 
 Technical Implementation
  Your project likely includes:
-
    • Android (Java/Kotlin) and/or iOS (Swift/Objective-C) implementations
-
    • Firebase console configuration instructions
-
    • Server-side code (possibly Node.js, Python, or other backend language) for sending notifications
-
    • Proper handling of notification payloads (data vs notification messages)
-
    • Deep linking implementation (if clicking notifications opens specific app content)
-
 Potential Use Cases
  This implementation would be valuable for:
-
    • Chat applications
-
    • Alert systems
-
    • Update notifications
-
    • Marketing communications
-
    • Any app requiring real-time messaging
