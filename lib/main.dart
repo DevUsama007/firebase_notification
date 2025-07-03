@@ -18,10 +18,13 @@ main() async {
 //handle the background notification
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   // if (message.notification != null) {
-  //   NotificationServices().showNotification(message);
+  //   await NotificationServices().showNotification(message);
   // }
+  print('notification title for background is ');
   print(message.notification!.title.toString());
 }
 

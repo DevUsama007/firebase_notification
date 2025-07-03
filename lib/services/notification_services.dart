@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_notification/view/notificaitonView.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -10,6 +11,7 @@ class NotificationServices {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
 //firebase Initialization
   void firebaseInit(BuildContext context) {
     FirebaseMessaging.onMessage.listen(
@@ -83,8 +85,7 @@ class NotificationServices {
 //show notification
   Future<void> showNotification(RemoteMessage message) async {
     AndroidNotificationChannel channel = AndroidNotificationChannel(
-        Random.secure().nextInt(100000).toString(), 'High Imortance Noticaiton',
-        
+        'high_importance_channel', 'High Imortance Noticaiton',
         importance: Importance.max);
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
@@ -132,11 +133,29 @@ class NotificationServices {
     if (initialMessage != null) {
       handleMessage(context, initialMessage);
     }
+
     //when app is in background
     FirebaseMessaging.onMessageOpenedApp.listen(
       (event) {
         handleMessage(context, event);
       },
     );
+  }
+//subscribe to the topic  in firebase messaging
+
+  void subcribeTopic(String topic) {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    messaging.subscribeToTopic(topic);
+    if (kDebugMode) {
+      print('subscribe to the topic ${topic} ');
+    }
+  }
+
+  void unsubcribeTopic(String topic) {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    messaging.unsubscribeFromTopic(topic);
+    if (kDebugMode) {
+      print('unsubscribe to the topic ${topic} ');
+    }
   }
 }

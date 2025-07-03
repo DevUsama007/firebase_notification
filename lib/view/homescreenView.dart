@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_notification/services/getServerKeyFromJson.dart';
 import 'package:firebase_notification/services/get_server_key.dart';
 import 'package:firebase_notification/services/notification_services.dart';
+import 'package:firebase_notification/services/sendNotificationToTopic.dart';
 import 'package:firebase_notification/services/send_notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +21,7 @@ class _HomescreenviewState extends State<Homescreenview> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _notificationServices.subcribeTopic('all');
     _notificationServices.requestNotificationPermission();
     _notificationServices.firebaseInit(context);
     _notificationServices.setupInteractMessage(context);
@@ -27,28 +29,6 @@ class _HomescreenviewState extends State<Homescreenview> {
     _notificationServices.getDeviceToken().then(
       (value) async {
         print(value);
-        // String serverkey = await GetServerKey.getServerKey();
-        // print('server_key:');
-        // print(serverkey.toString());
-        // var data = {
-        //   'to': value.toString(),
-        //   'priority': 'high',
-        //   'notification': {
-        //     'title': 'Usama Basharat',
-        //     'body': 'Here i am for you',
-        //   },
-        //   'data': {'type': 'msj', 'id': '1234 '}
-        // };
-        // print('Device token');
-        // print(value);
-        // await http.post(
-        //     Uri.parse(
-        //         "https://fcm.googleapis.com/v1/projects/myproject-b5ae1/messages:send"),
-        //     body: jsonEncode(data),
-        //     headers: {
-        //       'Context-Type': 'application/json: charset=UTF-8',
-        //       'Authorization': 'server_key'
-        //     });
       },
     );
   }
@@ -73,8 +53,8 @@ class _HomescreenviewState extends State<Homescreenview> {
                   (value) async {
                     print('Deviev token :${value}');
                     await SendNotificationService.sendNotificationService(
-                        value.toString(),
-                        // "dnqrZB-wRoureeA4FobR_Q:APA91bHNpmSaB79X2HJgoYv7NcbD_4zHuBynMtv6OjMeMVHJMTkwLjJf3NAfisq4l7E3ZnoBZpNSGtfK0cn4hHFwaZAtkdk1C-aEDnN_jG7X2hTL0-QH0aw",
+                        // value.toString(),
+                        "eIyPLh7vRq2zKDc3qRlIRx:APA91bGMT7RqtjCzk6TS9JPkWXn_SJ_22DOmUsJX1Z_w04YKbjsjkHfCY2llxqR_onlAf7xUn_BAM_gxfzGNYdtBne25VmizP1MMVN2ea2IenpYoxWQpzq8",
                         "Usama Notification",
                         "I am here for coding",
                         {'screen': "Cart Screen", 'type': "dumy"});
@@ -91,7 +71,7 @@ class _HomescreenviewState extends State<Homescreenview> {
                     borderRadius: BorderRadius.circular(20)),
                 child: Center(
                     child: Text(
-                  'Send Notification',
+                  'Send Notification deviceId',
                   style: TextStyle(color: Colors.white),
                 )),
               ),
@@ -102,7 +82,28 @@ class _HomescreenviewState extends State<Homescreenview> {
                       await Getserverkeyfromjson().getServerKey();
                   print(serverKey);
                 },
-                child: Text("Get serverkey"))
+                child: Text("Get serverkey")),
+            ElevatedButton(
+                onPressed: () async {
+                  SendNotificationToTopicService.sendNotificationTopicService(
+                      "all",
+                      'HI ',
+                      'Good Morning',
+                      {'screen': "Cart Screen", 'type': "dumy"});
+                },
+                child: Text("Send notification to the device topic")),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: () => _notificationServices.subcribeTopic('all'),
+                    child: Text('Subscribe')),
+                ElevatedButton(
+                    onPressed: () =>
+                        _notificationServices.unsubcribeTopic('all'),
+                    child: Text('Unsubcribe')),
+              ],
+            )
           ],
         ),
       ),
